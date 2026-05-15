@@ -1,13 +1,14 @@
 using System;
+using _Game._Scripts.FPS.Interfaces;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _Game._Scripts.FPS.Input
 {
-    public class PlayerInput : inputaction
+    public class PlayerInput : IInputSystem
     {
         public event Action<Vector2> Move; 
         public event Action<Vector2> Look; 
-        public event Action<Vector2> Attack; 
         public event Action Attack; 
         public event Action Interact; 
         public event Action Crouch; 
