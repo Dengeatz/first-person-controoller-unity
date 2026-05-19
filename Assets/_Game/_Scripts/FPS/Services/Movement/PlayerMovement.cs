@@ -1,16 +1,25 @@
+using _Game._Scripts.FPS.Services.Movement;
+using _Game._Scripts.FPS.Services.Movement.States;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private PlayerMovementStateMachine _playerMovementStateMachine;
+    
+    private void OnEnable()
     {
-        
+        _playerMovementStateMachine = new PlayerMovementStateMachine();
+        _playerMovementStateMachine.InitStates();
+        _playerMovementStateMachine.TransitionToAsync<IdleState>();
+    }   
+
+    private void Update()
+    {
+        _playerMovementStateMachine.Update();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        _playerMovementStateMachine.Dispose();
     }
 }
