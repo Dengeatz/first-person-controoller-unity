@@ -20,6 +20,22 @@ namespace _Game._Scripts.FPS.Services.FSM
         public T CurrentState { get; private set; }
 
         public abstract void InitStates();
+        /// <summary>Кадр активного состояния; переопределяйте <see cref="IStateLifecycle.Update"/> в нужных T.</summary>
+        public void Update()
+        {
+            CurrentState?.Update();
+        }
+        /// <summary>Переход в состояние типа <typeparamref name="TState"/>.</summary>
+        public Task TransitionToAsync<TState>()
+            where TState : class, T =>
+            TransitionToAsync(typeof(TState));
+        
+        public void Dispose()
+        {
+            CurrentState?.Dispose();
+            DisposeToken();
+        }
+        
         /// <summary>Регистрирует экземпляр состояния; ключ — фактический тип <paramref name="state"/>.</summary>
         protected void RegisterState(T state)
         {
@@ -34,12 +50,8 @@ namespace _Game._Scripts.FPS.Services.FSM
             _states.Add(type, state);
         }
 
-        /// <summary>Кадр активного состояния; переопределяйте <see cref="IStateLifecycle.Update"/> в нужных T.</summary>
-        public void Update()
-        {
-            CurrentState?.Update();
-        }
 
+        
         /// <summary>Переход по типу зарегистрированного состояния.</summary>
         protected async Task TransitionToAsync(Type stateType)
         {
@@ -58,11 +70,6 @@ namespace _Game._Scripts.FPS.Services.FSM
             await TransitionToAsync(next, _cts.Token);
         }
 
-        /// <summary>Переход в состояние типа <typeparamref name="TState"/>.</summary>
-        public Task TransitionToAsync<TState>()
-            where TState : class, T =>
-            TransitionToAsync(typeof(TState));
-
         /// <summary>Переход в <paramref name="next"/>: выход из текущего состояния (если есть), затем вход в новое.</summary>
         protected async Task TransitionToAsync(T next, CancellationToken cancellationToken = default)
         {
@@ -80,15 +87,9 @@ namespace _Game._Scripts.FPS.Services.FSM
 
         private void DisposeToken()
         {
-            _cts?.Dispose();
             _cts?.Cancel();
+            _cts?.Dispose();
             _cts = null;
-        }
-        
-        public void Dispose()
-        {
-            CurrentState?.Dispose();
-            DisposeToken();
         }
     }
 }

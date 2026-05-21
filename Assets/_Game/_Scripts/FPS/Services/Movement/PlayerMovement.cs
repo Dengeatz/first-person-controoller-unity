@@ -7,31 +7,31 @@ using UnityEngine;
 public class PlayerMovement
 {
     private PlayerMovementStateMachine _playerMovementStateMachine;
-    private PlayerInput _playerInput;
+    private ControllerInput _controllerInput;
     private Rigidbody _rigidbody;
     
     private MovementConfig _movementConfig;
 
-    private void Init(MovementConfig movementConfig, PlayerInput playerInput, Rigidbody rigidbody)
+    public void Init(MovementConfig movementConfig, ControllerInput controllerInput, Rigidbody rigidbody)
     {
         _movementConfig = movementConfig;
-        _playerInput = playerInput;
+        _controllerInput = controllerInput;
         _rigidbody = rigidbody;
     }
     
-    private void OnEnable()
+    public void OnEnable()
     {
-        _playerMovementStateMachine = new PlayerMovementStateMachine(_playerInput);
+        _playerMovementStateMachine = new PlayerMovementStateMachine(_controllerInput, _rigidbody, _movementConfig);
         _playerMovementStateMachine.InitStates();
         _playerMovementStateMachine.TransitionToAsync<IdleState>();
     }   
 
-    private void Update()
+    public void Update()
     {
         _playerMovementStateMachine.Update();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         _playerMovementStateMachine.Dispose();
     }
