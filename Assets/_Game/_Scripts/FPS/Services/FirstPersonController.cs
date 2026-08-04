@@ -1,8 +1,6 @@
-using System;
 using _Game._Scripts.FPS.Configs;
 using _Game._Scripts.FPS.Input;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game._Scripts.FPS.Services
 {

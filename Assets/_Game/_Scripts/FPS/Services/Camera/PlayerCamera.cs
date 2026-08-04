@@ -1,7 +1,9 @@
 using _Game._Scripts.FPS.Interfaces;
-using UnityEngine;
 
-public class PlayerCamera : ICameraService
+namespace _Game._Scripts.FPS.Services.Camera
 {
-
+    public class PlayerCamera : ICameraService
+    {
+        
+    }
 }
